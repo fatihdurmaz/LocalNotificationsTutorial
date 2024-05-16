@@ -2,7 +2,7 @@
 
 <img src="https://yourimageshare.com/ib/xjCvJQIC6f.webp" alt="SwiftUI Local Notifications">
 
-## Let's Enable Users to Send Local Notifications in 3 Steps
+## Scheduling local notifications in 3 Steps
 
 1. Request Notification Permission from the User
 2. Send a Notification with a Timer
