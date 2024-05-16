@@ -1,4 +1,3 @@
-# Sending Local Notifications with SwiftUI
 
 <img src="https://yourimageshare.com/ib/xjCvJQIC6f.webp" alt="SwiftUI Local Notifications">
 
