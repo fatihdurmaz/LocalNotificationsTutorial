@@ -1,68 +1,68 @@
-# SwiftUI ile Yerel (uygulama içerisinden) Bildirimler Göndermek
+# Sending Local Notifications with SwiftUI
 
-3 adımda kullanıcının yerel bildirimler (local notifications) göndermesini sağlayalım.
+Let's Enable Users to Send Local Notifications in 3 Steps
 
-1. Kullanıcıdan bildirim izni isteme
-2. Zamanlayıcı ile bir bildirim gönderme
-3. Belirli bir tarih ve saate göre tekrar eden bir bildirim gönderme
+1. Request Notification Permission from the User
+2. Send a Notification with a Timer
+3. Send a Recurring Notification at a Specific Date and Time
 
-*UserNotifications çerçevesi bildirimleri yönetmek için kullanılır.*
+*UserNotifications framework is used to manage notifications.*
 
 
 ```swift
 import UserNotifications
 ```
 
-**1. Kullanıcıdan bildirim izni isteme**
+**1. Request Notification Permission from the User**
 ```swift
 UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { success, error in
     if success {
-        print("İzin verildi!")
+        print("Permission granted!")
     } else if let error = error {
         print(error.localizedDescription)
     }
 }
 ```
 
-**2. Zamanlayıcı ile bir bildirim gönderme**
+**2. Send a Notification with a Timer**
 ```swift
-// Bildirim içeriğini oluştur.
+// Make notification content.
 let content = UNMutableNotificationContent()
-content.title = "Bildirim Başlığı"
-content.subtitle = "Bildirim mesajı veya içeriği."
+content.title = "Notification Title"
+content.subtitle = "Notification Message"
 content.sound = UNNotificationSound.default
 
-// Bildirimin ne zaman gönderileceğini hazırlamak için tetikleyici oluştur.
+// Create a trigger to schedule when the notification will be sent.
 let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 10, repeats: false)
 
-// Bildirim isteğini oluştur.
+// Create the notification request.
 let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
 
-// Bildirimi, bildirim merkezine ekle.
+// Add the notification to the notification center.
 UNUserNotificationCenter.current().add(request)
 ```
 
-**3. Belirli bir tarih ve saate göre tekrar eden bir bildirim gönderme**
+**3. Send a Recurring Notification at a Specific Date and Time**
 ```swift
-// Bildirim içeriğini oluştur.
+// Make notification content.
 let content = UNMutableNotificationContent()
-content.title = "Bildirim Başlığı"
-content.subtitle = "Bildirim mesajı veya içeriği."
+content.title = "Notification Title"
+content.subtitle = "Notification Message"
 content.sound = UNNotificationSound.default
 
 var dateComponents = DateComponents()
-dateComponents.calendar = Calendar.current // Cihazın takvimini kullanacak.
+dateComponents.calendar = Calendar.current // Will use the device's calendar.
 
-dateComponents.weekday = 1  // Hangi gün
-dateComponents.hour = 12    // Hangi saat
+dateComponents.weekday = 1  // Which day
+dateComponents.hour = 12    // Which hour
 
-// Bildirimin ne zaman gönderileceğini hazırlamak için tetikleyici oluştur.
+// Create a trigger to schedule when the notification will be sent.
 let trigger = UNCalendarNotificationTrigger(
          dateMatching: dateComponents, repeats: true)
 
-// Bildirim isteğini oluştur.
+// Create the notification request.
 let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
 
-// Bildirimi, bildirim merkezine ekle.
+// Add the notification to the notification center.
 UNUserNotificationCenter.current().add(request)
 ```
