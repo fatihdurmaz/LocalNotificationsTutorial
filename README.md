@@ -1,5 +1,6 @@
 # Sending Local Notifications with SwiftUI
 
+<img src="https://yourimageshare.com/ib/xjCvJQIC6f.webp" alt="SwiftUI Local Notifications">
 Let's Enable Users to Send Local Notifications in 3 Steps
 
 1. Request Notification Permission from the User
