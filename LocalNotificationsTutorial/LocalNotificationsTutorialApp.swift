@@ -2,7 +2,7 @@
 //  LocalNotificationsTutorialApp.swift
 //  LocalNotificationsTutorial
 //
-//  Created by Fatih Durmaz on 16.05.2024.
+//  Created by Fatih Durmaz on 03.06.2024.
 //
 
 import SwiftUI
