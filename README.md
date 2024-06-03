@@ -34,7 +34,7 @@ content.subtitle = "Notification Message"
 content.sound = UNNotificationSound.default
 
 // Create a trigger to schedule when the notification will be sent.
-let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 10, repeats: false)
+let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 10, repeats: false) // or repeats: true
 
 // Create the notification request.
 let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
