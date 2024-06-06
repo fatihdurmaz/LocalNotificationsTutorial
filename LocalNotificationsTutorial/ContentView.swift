@@ -15,13 +15,28 @@ struct ContentView: View {
                 List {
                     HStack {
                         Button(action: {
-                            UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { success, error in
-                                if success {
-                                    print("İzin verildi!")
-                                } else if let error = error {
+                            // Request Notification Permissions
+                            
+                            Task {
+                                
+                                let authorizationCenter = UNUserNotificationCenter.current()
+                                
+                                do {
+                                    
+                                    let success = try await authorizationCenter.requestAuthorization(options: [.alert, .badge, .sound])
+                                    
+                                    if success {
+                                        print("İzin verildi!")
+                                    }else {
+                                        print("İzin verilmedi!")
+                                    }
+                                    
+                                } catch {
                                     print(error.localizedDescription)
                                 }
                             }
+                            
+                            
                         }, label: {
                             Label("Bildirim İzni İste", systemImage: "1.circle.fill")
                                 .font(.title2)
@@ -34,26 +49,34 @@ struct ContentView: View {
                     
                     HStack {
                         Button(action: {
-                            // Bildirim içeriğini oluştur.
-                            let content = UNMutableNotificationContent()
-                            content.title = "Bildirim Başlığı"
-                            content.subtitle = "Bildirim mesajı veya içeriği."
-                            content.sound = UNNotificationSound.default
+                            // Send Local Notifications
                             
-                            // Bildirimin ne zaman gönderileceğini hazırlamak için tetikleyici oluştur.
-                            let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 5, repeats: false)
+                            Task {
+                                
+                                let content  = UNMutableNotificationContent()
+                                content.title = "Bildirim Başlığı"
+                                content.subtitle = "Bildirim mesajı veya içeriği"
+                                content.sound = UNNotificationSound.default
+                                
+                                
+                                let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 60, repeats: true)
+                                let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
+                                
+                                
+                                do {
+                                    try await UNUserNotificationCenter.current().add(request)
+                                    
+                                } catch {
+                                    print(error.localizedDescription)
+                                }
+                            }
                             
-                            // Bildirim isteğini oluştur.
-                            let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
-                            
-                            // Bildirimi, bildirim merkezine ekle.
-                            UNUserNotificationCenter.current().add(request)
                             
                         }, label: {
                             Label("Bildirim Gönder", systemImage: "2.circle.fill")
                                 .font(.title2)
                         })
-                        .tint(.red)
+                        .tint(.green)
                         Spacer()
                         Image(systemName: "arrow.forward")
                     }
@@ -61,34 +84,40 @@ struct ContentView: View {
                     
                     HStack {
                         Button(action: {
-                            // Bildirim içeriğini oluştur.
-                            let content = UNMutableNotificationContent()
-                            content.title = "Bildirim Başlığı"
-                            content.subtitle = "Bildirim mesajı veya içeriği."
-                            content.sound = UNNotificationSound.default
+                            // Send Local Notifications by Date or Time
                             
-                            var dateComponents = DateComponents()
-                            dateComponents.calendar = Calendar.current // Cihazın takvimini kullanacak.
-                            
-                            dateComponents.weekday = 1  // Hangi gün
-                            dateComponents.hour = 12    // Hangi saat
-                            
-                            // Bildirimin ne zaman gönderileceğini hazırlamak için tetikleyici oluştur.
-                            let trigger = UNCalendarNotificationTrigger(
-                                dateMatching: dateComponents, repeats: true)
-                            
-                            // Bildirim isteğini oluştur.
-                            let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
-                            
-                            // Bildirimi, bildirim merkezine ekle.
-                            UNUserNotificationCenter.current().add(request)
+                            Task {
+                                let content  = UNMutableNotificationContent()
+                                content.title = "Bildirim Başlığı"
+                                content.subtitle = "Bildirim mesajı veya içeriği"
+                                content.sound = UNNotificationSound.default
+                                
+                                var dateComponent = DateComponents()
+                                dateComponent.calendar = Calendar.current
+                                
+                                dateComponent.weekday = 1
+                                dateComponent.hour = 12
+                                
+                                
+                                let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponent, repeats: true)
+                                
+                                let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
+                                
+                                
+                                do {
+                                    try await UNUserNotificationCenter.current().add(request)
+                                    
+                                } catch {
+                                    print(error.localizedDescription)
+                                }
+                            }
                             
                             
                         }, label: {
                             Label("Tarih ve Saate Göre Bildirim Gönder", systemImage: "3.circle.fill")
                                 .font(.title2)
                         })
-                        .tint(.green)
+                        .tint(.red)
                         Spacer()
                         Image(systemName: "arrow.forward")
                     }
